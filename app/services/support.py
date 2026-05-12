@@ -8,7 +8,6 @@ from app.schemas.support import (
 
 
 class SupportService:
-
     @staticmethod
     async def create_ticket(
         payload: ContactSupportRequest,
