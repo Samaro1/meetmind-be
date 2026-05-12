@@ -224,7 +224,7 @@ class InterviewService:
             else None,
             created_at=interview.created_at,
         )
-        
+
     @staticmethod
     async def _get_interview_or_404(
         interview_id: uuid.UUID,
@@ -265,7 +265,6 @@ class InterviewService:
             )
 
         return interview
-
 
     @staticmethod
     async def submit_scorecard(
@@ -319,13 +318,10 @@ class InterviewService:
 
         # Fetch existing scores
         existing_scores_result = await db.execute(
-            select(ScorecardScore).where(
-                ScorecardScore.scorecard_id == scorecard.id
-            )
+            select(ScorecardScore).where(ScorecardScore.scorecard_id == scorecard.id)
         )
         existing_score_map = {
-            s.category_id: s
-            for s in existing_scores_result.scalars().all()
+            s.category_id: s for s in existing_scores_result.scalars().all()
         }
 
         # Upsert each submitted score
@@ -335,12 +331,14 @@ class InterviewService:
                 existing.score_pct = submitted.score_pct
                 existing.completed = True
             else:
-                db.add(ScorecardScore(
-                    scorecard_id=scorecard.id,
-                    category_id=submitted.category_id,
-                    score_pct=submitted.score_pct,
-                    completed=True,          # fix #4: mark submitted scores as done
-                ))
+                db.add(
+                    ScorecardScore(
+                        scorecard_id=scorecard.id,
+                        category_id=submitted.category_id,
+                        score_pct=submitted.score_pct,
+                        completed=True,  # fix #4: mark submitted scores as done
+                    )
+                )
 
         interview.rating = request.overall_rating
 
@@ -372,7 +370,6 @@ class InterviewService:
             ],
             updated_at=scorecard.updated_at,
         )
-
 
     @staticmethod
     async def get_candidate_profile(
@@ -408,9 +405,7 @@ class InterviewService:
 
         # Candidate
         candidate_result = await db.execute(
-            select(Candidate).where(
-                Candidate.id == interview.candidate_id
-            )
+            select(Candidate).where(Candidate.id == interview.candidate_id)
         )
         candidate = candidate_result.scalar_one()
 
@@ -457,15 +452,9 @@ class InterviewService:
 
             summary_response = SummaryResponse(
                 ai_assessment=summary.ai_assessment,
-                skills_to_assess=[
-                    skill.skill for skill in skills
-                ],
-                highlights=[
-                    item.content for item in highlights
-                ],
-                red_flags=[
-                    item.content for item in red_flags
-                ],
+                skills_to_assess=[skill.skill for skill in skills],
+                highlights=[item.content for item in highlights],
+                red_flags=[item.content for item in red_flags],
             )
 
         # Scorecard
@@ -529,7 +518,5 @@ class InterviewService:
             ),
             scorecard=scorecard_response,
             summary=summary_response,
-            transcript_status=(
-                transcript.status if transcript else None
-            ),
+            transcript_status=(transcript.status if transcript else None),
         )

@@ -76,9 +76,7 @@ async def create_interview(client: AsyncClient, token: str) -> str:
         json=VALID_INTERVIEW_PAYLOAD,
         headers=auth_headers(token),
     )
-    assert response.status_code == 201, (
-        f"Interview creation failed: {response.json()}"
-    )
+    assert response.status_code == 201, f"Interview creation failed: {response.json()}"
     return response.json()["data"]["id"]
 
 
@@ -179,7 +177,8 @@ class TestSubmitScorecard:
         body = response.json()
         logger.info(
             "[submit new] PATCH /scorecard → %d  body=%s",
-            response.status_code, body,
+            response.status_code,
+            body,
         )
 
         assert response.status_code == 200, (
@@ -242,7 +241,8 @@ class TestSubmitScorecard:
         body = r2.json()
         logger.info(
             "[update] PATCH /scorecard → %d  body=%s",
-            r2.status_code, body,
+            r2.status_code,
+            body,
         )
 
         assert r2.status_code == 200, (
@@ -289,7 +289,8 @@ class TestSubmitScorecard:
         body = response.json()
         logger.info(
             "[not completed] PATCH /scorecard → %d  body=%s",
-            response.status_code, body,
+            response.status_code,
+            body,
         )
 
         assert response.status_code == 422, (
@@ -330,7 +331,8 @@ class TestSubmitScorecard:
         body = response.json()
         logger.info(
             "[bad category] PATCH /scorecard → %d  body=%s",
-            response.status_code, body,
+            response.status_code,
+            body,
         )
 
         assert response.status_code == 422, (
@@ -370,9 +372,7 @@ class TestSubmitScorecard:
             headers=auth_headers(token_b),
         )
         body = response.json()
-        logger.info(
-            "[cross user] PATCH /scorecard → %d", response.status_code
-        )
+        logger.info("[cross user] PATCH /scorecard → %d", response.status_code)
 
         assert response.status_code == 404, (
             f"Expected 404 for cross-user access, got "
@@ -436,7 +436,8 @@ class TestGetCandidateProfile:
         body = response.json()
         logger.info(
             "[profile basic] GET /profile → %d  body=%s",
-            response.status_code, body,
+            response.status_code,
+            body,
         )
 
         assert response.status_code == 200, (
@@ -532,9 +533,7 @@ class TestGetCandidateProfile:
             headers=auth_headers(token),
         )
         body = response.json()
-        logger.info(
-            "[not found] GET /profile/%s → %d", fake_id, response.status_code
-        )
+        logger.info("[not found] GET /profile/%s → %d", fake_id, response.status_code)
 
         assert response.status_code == 404, (
             f"Expected 404, got {response.status_code}. Body: {body}"
@@ -564,9 +563,7 @@ class TestGetCandidateProfile:
             headers=auth_headers(token_b),
         )
         body = response.json()
-        logger.info(
-            "[cross user] GET /profile → %d", response.status_code
-        )
+        logger.info("[cross user] GET /profile → %d", response.status_code)
 
         assert response.status_code == 404, (
             f"Expected 404 for cross-user profile access, got "

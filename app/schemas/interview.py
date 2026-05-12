@@ -50,7 +50,9 @@ class InterviewResponse(BaseModel):
 
     model_config = {"from_attributes": True}
 
+
 # ── Enums ──────────────────────────────────────────────────────────────────────
+
 
 class InterviewStatus(str, Enum):
     draft = "draft"
@@ -67,20 +69,24 @@ class TranscriptStatus(str, Enum):
 
 # ── Scorecard schemas ──────────────────────────────────────────────────────────
 
+
 class ScorecardScoreRequest(BaseModel):
     """A single category score submitted by the interviewer."""
+
     category_id: UUID
     score_pct: int = Field(..., ge=0, le=100)
 
 
 class ScorecardSubmitRequest(BaseModel):
     """Request body for PATCH /interviews/:id/scorecard."""
+
     overall_rating: int = Field(..., ge=1, le=5)
     scores: list[ScorecardScoreRequest] = Field(..., min_length=1)
 
 
 class ScorecardScoreResponse(BaseModel):
     """A single score row returned in the scorecard response."""
+
     category_id: UUID
     category_name: str
     score_pct: int
@@ -90,9 +96,10 @@ class ScorecardScoreResponse(BaseModel):
 
 class ScorecardResponse(BaseModel):
     """Returned after a scorecard submit or update."""
+
     scorecard_id: UUID
     interview_id: UUID
-    overall_rating: int | None 
+    overall_rating: int | None
     scores: list[ScorecardScoreResponse]
     updated_at: datetime | None
 
@@ -100,6 +107,7 @@ class ScorecardResponse(BaseModel):
 
 
 # ── Candidate profile schemas ──────────────────────────────────────────────────
+
 
 class CandidateResponse(BaseModel):
     id: UUID
@@ -118,6 +126,7 @@ class InterviewMetaResponse(BaseModel):
     Interview fields returned inside the profile.
     Separate from any broader InterviewResponse schema.
     """
+
     id: UUID
     role_title: str | None
     status: InterviewStatus | None
@@ -142,6 +151,7 @@ class SummaryResponse(BaseModel):
 
 class CandidateProfileResponse(BaseModel):
     """Response for GET /interviews/:id/profile."""
+
     candidate: CandidateResponse
     interview: InterviewMetaResponse
     scorecard: ScorecardResponse | None
