@@ -15,9 +15,9 @@ from app.db.session import get_session
 from app.models.base import Base
 
 
-@pytest.fixture(scope="session")
-def anyio_backend():
-    return "asyncio"
+# @pytest.fixture(scope="session")
+# def anyio_backend():
+#     return "asyncio"
 
 
 def mock_get_session():
@@ -52,6 +52,7 @@ async def create_tables():
     from app.models import (  # noqa: F401  # noqa: F401
         email_verification,
         interview,
+        scorecard,
         user,
         workspace,
     )
