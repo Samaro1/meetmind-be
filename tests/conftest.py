@@ -10,10 +10,7 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.pool import StaticPool
 
 from app.db.session import get_session
-
-# Delay importing `app` until after tests have disabled the rate limiter
 from app.models.base import Base
-
 
 # @pytest.fixture(scope="session")
 # def anyio_backend():

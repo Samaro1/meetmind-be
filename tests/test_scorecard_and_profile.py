@@ -20,7 +20,7 @@ import uuid
 
 import pytest
 from httpx import AsyncClient
-from sqlalchemy import insert, select, text, update
+from sqlalchemy import insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.interview import Interview
@@ -202,7 +202,8 @@ class TestSubmitScorecard:
         """
         GIVEN a scorecard was already submitted for a completed interview
         WHEN  PATCH /interviews/{id}/scorecard is called again with new values
-        THEN  the response is 200 with the updated score — no duplicate scorecard created
+        THEN  the response is 200 with the updated score — no duplicate
+              scorecard created
 
         Expected:
             First  PATCH → 200  score_pct=60
@@ -292,7 +293,8 @@ class TestSubmitScorecard:
         )
 
         assert response.status_code == 422, (
-            f"Expected 422 for non-completed interview, got {response.status_code}. Body: {body}"
+            f"Expected 422 for non-completed interview, got "
+            f"{response.status_code}. Body: {body}"
         )
         assert body["error"]["code"] == "interview_not_completed"
         logger.info("[result] Non-completed interview correctly rejected.")
@@ -332,7 +334,8 @@ class TestSubmitScorecard:
         )
 
         assert response.status_code == 422, (
-            f"Expected 422 for invalid category, got {response.status_code}. Body: {body}"
+            f"Expected 422 for invalid category, got "
+            f"{response.status_code}. Body: {body}"
         )
         assert body["error"]["code"] == "invalid_scorecard_category"
         logger.info("[result] Invalid category correctly rejected.")
@@ -372,7 +375,8 @@ class TestSubmitScorecard:
         )
 
         assert response.status_code == 404, (
-            f"Expected 404 for cross-user access, got {response.status_code}. Body: {body}"
+            f"Expected 404 for cross-user access, got "
+            f"{response.status_code}. Body: {body}"
         )
         logger.info("[result] Cross-user scorecard access correctly blocked.")
 
@@ -565,7 +569,8 @@ class TestGetCandidateProfile:
         )
 
         assert response.status_code == 404, (
-            f"Expected 404 for cross-user profile access, got {response.status_code}. Body: {body}"
+            f"Expected 404 for cross-user profile access, got "
+            f"{response.status_code}. Body: {body}"
         )
         logger.info("[result] Cross-user profile access correctly blocked")
 

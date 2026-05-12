@@ -9,32 +9,33 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.responses import APIError
-from app.models.interview import Candidate, Interview, InterviewSummary, InterviewTranscript
-from app.models.user import User
-from app.models.workspace import Workspace, WorkspaceMember
-from app.schemas.interview import (
-    CandidateProfileResponse,
-    CreateInterviewRequest,
-    InterviewResponse,
-    InterviewSummaryResponse,
-    ScorecardResponse,
-    ScorecardScoreResponse,
-    ScorecardSubmitRequest,
-    CandidateResponse,
-    InterviewMetaResponse,
-    SummaryResponse,
+from app.models.interview import (
+    Candidate,
+    Interview,
+    InterviewHighlight,
+    InterviewRedFlag,
+    InterviewSkillToAssess,
+    InterviewSummary,
+    InterviewTranscript,
 )
 from app.models.scorecard import (
     InterviewScorecard,
     ScorecardCategory,
     ScorecardScore,
 )
-
-from app.models.interview import (
-    InterviewTranscript,
-    InterviewSkillToAssess,
-    InterviewHighlight,
-    InterviewRedFlag,
+from app.models.user import User
+from app.models.workspace import Workspace, WorkspaceMember
+from app.schemas.interview import (
+    CandidateProfileResponse,
+    CandidateResponse,
+    CreateInterviewRequest,
+    InterviewMetaResponse,
+    InterviewResponse,
+    InterviewSummaryResponse,
+    ScorecardResponse,
+    ScorecardScoreResponse,
+    ScorecardSubmitRequest,
+    SummaryResponse,
 )
 
 
@@ -480,7 +481,10 @@ class InterviewService:
         if scorecard:
             score_rows_result = await db.execute(
                 select(ScorecardScore, ScorecardCategory)
-                .join(ScorecardCategory, ScorecardCategory.id == ScorecardScore.category_id)
+                .join(
+                    ScorecardCategory,
+                    ScorecardCategory.id == ScorecardScore.category_id,
+                )
                 .where(ScorecardScore.scorecard_id == scorecard.id)
             )
             rows = score_rows_result.all()

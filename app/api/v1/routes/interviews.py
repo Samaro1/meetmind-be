@@ -11,9 +11,7 @@ from app.api.deps import CurrentUser
 from app.core.responses import success
 from app.db.session import get_session
 from app.schemas.interview import (
-    CandidateProfileResponse,
     CreateInterviewRequest,
-    ScorecardResponse,
     ScorecardSubmitRequest,
 )
 from app.services.interview import InterviewService
